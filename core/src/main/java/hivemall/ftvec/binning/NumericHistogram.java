@@ -19,12 +19,13 @@
 package hivemall.ftvec.binning;
 
 
+import hivemall.utils.lang.SizeOf;
+
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Collections;
+import java.util.List;
 import java.util.Random;
 
-import hivemall.utils.lang.SizeOf;
 import org.apache.hadoop.hive.serde2.io.DoubleWritable;
 import org.apache.hadoop.hive.serde2.objectinspector.primitive.DoubleObjectInspector;
 
@@ -42,16 +43,14 @@ public class NumericHistogram {
     /**
      * The Coord class defines a histogram bin, which is just an (x,y) pair.
      */
-    static class Coord implements Comparable {
+    static class Coord implements Comparable<Coord> {
         double x;
         double y;
 
-        public int compareTo(Object other) {
-            return Double.compare(x, ((Coord) other).x);
+        public int compareTo(Coord other) {
+            return Double.compare(x, other.x);
         }
     }
-
-    ;
 
     // Class variables
     private int nbins;
@@ -336,4 +335,5 @@ public class NumericHistogram {
         length += sizeOfLengthForRandom; // Random
         return length;
     }
+
 }

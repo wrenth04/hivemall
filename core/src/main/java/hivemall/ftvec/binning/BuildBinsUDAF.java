@@ -20,6 +20,10 @@ package hivemall.ftvec.binning;
 
 import hivemall.utils.hadoop.HiveUtils;
 import hivemall.utils.hadoop.WritableUtils;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import org.apache.hadoop.hive.ql.exec.Description;
 import org.apache.hadoop.hive.ql.exec.UDFArgumentException;
 import org.apache.hadoop.hive.ql.exec.UDFArgumentLengthException;
@@ -43,9 +47,6 @@ import org.apache.hadoop.hive.serde2.objectinspector.primitive.WritableBooleanOb
 import org.apache.hadoop.hive.serde2.objectinspector.primitive.WritableDoubleObjectInspector;
 import org.apache.hadoop.io.BooleanWritable;
 
-import java.util.ArrayList;
-import java.util.List;
-
 @Description(
         name = "build_bins",
         value = "_FUNC_(int|bigint|float|double weight, const int num_of_bins[, const boolean auto_shrink = false]) - Return quantiles representing bins: array<double>")
@@ -59,8 +60,9 @@ public class BuildBinsUDAF extends AbstractGenericUDAFResolver {
             throws SemanticException {
         ObjectInspector[] OIs = info.getParameterObjectInspectors();
 
-        if (OIs.length != 2 && OIs.length != 3)
+        if (OIs.length != 2 && OIs.length != 3) {
             throw new UDFArgumentLengthException("Specify two or three arguments.");
+        }
 
         // check type of col
         if (OIs[idxOfCol].getCategory() != ObjectInspector.Category.PRIMITIVE)

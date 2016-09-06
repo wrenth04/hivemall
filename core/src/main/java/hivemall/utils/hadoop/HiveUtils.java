@@ -51,6 +51,7 @@ import org.apache.hadoop.hive.serde2.lazy.LazySimpleSerDe;
 import org.apache.hadoop.hive.serde2.lazy.LazyString;
 import org.apache.hadoop.hive.serde2.objectinspector.ConstantObjectInspector;
 import org.apache.hadoop.hive.serde2.objectinspector.ListObjectInspector;
+import org.apache.hadoop.hive.serde2.objectinspector.MapObjectInspector;
 import org.apache.hadoop.hive.serde2.objectinspector.ObjectInspector;
 import org.apache.hadoop.hive.serde2.objectinspector.ObjectInspector.Category;
 import org.apache.hadoop.hive.serde2.objectinspector.ObjectInspectorUtils;
@@ -776,6 +777,16 @@ public final class HiveUtils {
             throw new UDFArgumentException("Expected List OI but was: " + oi);
         }
         return (ListObjectInspector) oi;
+    }
+
+    @Nonnull
+    public static MapObjectInspector asMapOI(@Nonnull final ObjectInspector oi)
+            throws UDFArgumentException {
+        Category category = oi.getCategory();
+        if (category != Category.MAP) {
+            throw new UDFArgumentException("Expected Map OI but was: " + oi);
+        }
+        return (MapObjectInspector) oi;
     }
 
     public static void validateFeatureOI(@Nonnull final ObjectInspector oi)
